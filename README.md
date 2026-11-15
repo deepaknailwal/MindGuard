@@ -28,6 +28,39 @@ A Chrome extension that helps people quit pornography. When it detects explicit 
 
 Reload any tabs that were already open. Chrome does not allow extensions to run on `chrome://` pages or the Chrome Web Store.
 
+
+## How to use
+
+### 1. One-time setup (about 5 minutes)
+
+Click the MindGuard icon, then **Open settings**:
+
+1. **My message**: write something for yourself, for example "I'm quitting this for my family and my goals."
+2. **My photos and videos**: add the people and goals that keep you going. One of them is shown when an alert triggers.
+3. **Sensitivity**: choose how strict detection should be.
+4. *(Optional)* **Train the model**: show it your own NSFW and Safe examples so detection fits you.
+5. *(Optional)* **Gemini cloud check**: add an API key for a second opinion on borderline images.
+
+Then use **Detection test** to pick any image and see whether it would be flagged.
+
+### 2. Daily use
+
+You don't have to do anything, just browse:
+
+- Images stay blurred for a moment while they are checked, then show normally.
+- If something explicit is found, it is blurred, any video is paused and muted, and a full-screen alert shows **your own photo/video and message**.
+- **Close this tab** closes the page.
+- **False alarm** unlocks after 15 seconds. Press it only if the alert was wrong. That image is added to your Safe examples, so the model improves.
+
+The toolbar popup shows the ON/OFF switch, how long you have been clean, and how many alerts you have had.
+
+### Good to know
+
+- It only works inside Chrome pages, not in other apps on your computer.
+- Chrome does not allow extensions on `chrome://` pages or the Chrome Web Store.
+- Anyone can turn the extension off, so it works best as a speed bump. Sharing your progress with a trusted friend helps a lot.
+
+
 ## How it works
 
 ```
