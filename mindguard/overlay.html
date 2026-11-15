@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+html,body{height:100%}
+body{background:radial-gradient(circle at 50% 30%,#12302f,#0a0f14 70%)}
+.wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:24px;text-align:center}
+.pill{background:rgba(20,184,166,.15);color:var(--acc);border:1px solid rgba(20,184,166,.4);padding:6px 14px;border-radius:99px;font-size:14px;font-weight:600}
+#holder{min-height:0}
+#media{max-width:min(80vw,640px);max-height:48vh;border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+#msg{font-size:clamp(20px,3vw,28px);max-width:680px;line-height:1.45;font-weight:600}
+.sub{color:var(--mute);font-size:14px}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+#close{padding:14px 28px;font-size:16px}
+#false{opacity:.9}#false:disabled{opacity:.35;cursor:not-allowed}
+.breath{width:14px;height:14px;border-radius:50%;background:var(--acc);animation:b 4s ease-in-out infinite}
+@keyframes b{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(2.2);opacity:1}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="pill" id="streak"></div>
+  <div id="holder"></div>
+  <div id="msg"></div>
+  <div class="sub">Take a deep breath. This urge passes within a few minutes.</div>
+  <div class="breath"></div>
+  <div class="row">
+    <button class="btn-primary" id="close">Close this tab</button>
+    <button class="btn-ghost" id="false" disabled>False alarm</button>
+  </div>
+</div>
+<script src="overlay.js"></script>
+</body></html>

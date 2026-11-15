@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>MindGuard: Training</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.page{max-width:760px;margin:0 auto;padding:32px 20px 80px}
+h1{margin:0 0 4px;font-size:26px}.lead{color:var(--mute);margin:0 0 22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}
+.card h2{margin:0 0 4px;font-size:17px}.card p{margin:0 0 12px;color:var(--mute);font-size:14px;line-height:1.5}
+.safety{background:#3b2a12;border:1px solid #7a5518;color:#f6d28b;border-radius:12px;padding:14px;font-size:13.5px;line-height:1.55;margin-bottom:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+.box{border:2px dashed var(--line);border-radius:14px;padding:18px;text-align:center;transition:.15s}
+.box.over{border-color:var(--acc);background:rgba(20,184,166,.06)}
+.box h3{margin:0 0 4px;font-size:15px}.box small{color:var(--mute);display:block;margin-bottom:12px;font-size:12.5px}
+.cnt{font-size:34px;font-weight:800;color:var(--acc);line-height:1;margin:6px 0 12px}
+.bad .cnt{color:#fb7185}
+.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btns button{padding:8px 12px;font-size:13px}
+.bar{height:10px;background:#0f1419;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin-top:12px;display:none}
+.bar>div{height:100%;width:0;background:var(--acc);transition:width .15s}
+.msg{margin-top:10px;font-size:14px;color:var(--mute);min-height:20px}
+.res{padding:12px 14px;border-radius:10px;background:#0f1419;border:1px solid var(--line);font-size:14px;line-height:1.7;margin-top:12px}
+.res.ok{border-color:var(--acc)}.res.bad{border-color:var(--bad);color:#fca5a5}
+.frow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid var(--line);font-size:14px;margin-top:12px}
+ul.tips{margin:0;padding-left:18px;color:var(--mute);font-size:13.5px;line-height:1.7}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--acc);color:#04201d;padding:12px 22px;border-radius:99px;font-weight:600;transition:.25s;opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style></head>
+<body><div class="page">
+  <h1>Train the model</h1>
+  <p class="lead">Show the extension what should and should not be flagged for you.</p>
+
+  <div class="safety">
+    <b>Important:</b> only use content of adults (18+) that you legally have. Never add any image of a minor (under 18) or any illegal content.
+    Images never leave your computer and are not saved. Only a few numbers are extracted from each image, and the image is discarded right away.
+  </div>
+
+  <div class="card">
+    <h2>1. Add examples</h2>
+    <p>Photos or videos (a few frames are taken from each video). You can also pick a whole folder.</p>
+    <div class="two">
+      <div class="box bad" id="boxPos">
+        <h3>NSFW / adult</h3><small>Should be flagged</small>
+        <div class="cnt" id="cPos">0</div>
+        <div class="btns">
+          <button class="btn-ghost" data-pick="pos">Files</button>
+          <button class="btn-ghost" data-pick="posdir">Folder</button>
+        </div>
+      </div>
+      <div class="box" id="boxNeg">
+        <h3>Safe / normal</h3><small>Should not be flagged</small>
+        <div class="cnt" id="cNeg">0</div>
+        <div class="btns">
+          <button class="btn-ghost" data-pick="neg">Files</button>
+          <button class="btn-ghost" data-pick="negdir">Folder</button>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="in_pos" accept="image/*,video/*" multiple hidden>
+    <input type="file" id="in_posdir" webkitdirectory multiple hidden>
+    <input type="file" id="in_neg" accept="image/*,video/*" multiple hidden>
+    <input type="file" id="in_negdir" webkitdirectory multiple hidden>
+    <div class="bar" id="pbar"><div id="pfill"></div></div>
+    <div class="msg" id="pmsg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Tips for better results</h2>
+    <ul class="tips">
+      <li>At least 20 examples on each side, ideally 100 or more.</li>
+      <li>Add lots of variety to <b>Safe</b>, especially the things that get flagged wrongly: selfies, beach/gym photos, family photos, warm-colored photos, memes, products.</li>
+      <li>Whenever you press "False alarm" on the overlay, that image is added to Safe examples automatically. Then come back here and train again.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>2. Train</h2>
+    <p>Training happens inside your browser and takes a few seconds.</p>
+    <button class="btn-primary" id="trainBtn">Train</button>
+    <div class="msg" id="tmsg"></div>
+    <div class="res" id="status"></div>
+    <div class="frow"><span>Use trained model</span><label class="switch"><input type="checkbox" id="useClf"><span class="slider"></span></label></div>
+    <div class="frow"><span>Clear data</span>
+      <span class="btns"><button class="btn-danger" id="clrPos">NSFW examples</button><button class="btn-danger" id="clrNeg">Safe examples</button><button class="btn-danger" id="clrAll">Reset everything</button></span>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="features.js"></script>
+<script src="train.js"></script>
+</body></html>

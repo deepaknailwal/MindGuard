@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="shared.css">
+<style>
+body{width:320px;padding:18px}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.brand{font-weight:700;font-size:17px}.brand small{display:block;font-weight:400;color:var(--mute);font-size:12px;margin-top:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.streak{text-align:center}
+.streak .n{font-size:44px;font-weight:800;color:var(--acc);line-height:1}
+.streak .l{color:var(--mute);font-size:13px;margin-top:6px}
+.row{display:flex;gap:10px}.row>div{flex:1;text-align:center}
+.row .v{font-size:20px;font-weight:700}.row .k{font-size:12px;color:var(--mute)}
+.warn{background:#3b2a12;border:1px solid #7a5518;color:#f6d28b;border-radius:12px;padding:12px;font-size:13px;line-height:1.45;margin-bottom:12px;display:none}
+.status{font-size:13px;color:var(--mute);margin-bottom:12px;text-align:center}
+.status b{color:var(--acc)}
+button.full{width:100%}
+</style></head>
+<body>
+<div class="top">
+  <div class="brand">MindGuard<small id="state"></small></div>
+  <label class="switch"><input type="checkbox" id="on"><span class="slider"></span></label>
+</div>
+<div class="warn" id="warn"></div>
+<div class="card streak"><div class="n" id="days">0</div><div class="l" id="dl">days clean</div></div>
+<div class="card row">
+  <div><div class="v" id="fc">0</div><div class="k">Total alerts</div></div>
+  <div><div class="v" id="mc">0</div><div class="k">My photos/videos</div></div>
+</div>
+<div class="status" id="site"></div>
+<button class="btn-primary full" id="opt">Open settings</button>
+<script src="popup.js"></script>
+</body></html>

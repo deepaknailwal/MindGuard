@@ -1,0 +1,5 @@
+img.ng-pending, video.ng-pending,
+img.ng-flagged, video.ng-flagged {
+  filter: blur(30px) !important;
+}
+.ng-text-flagged { filter: blur(8px) !important; }

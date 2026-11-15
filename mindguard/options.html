@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>MindGuard Settings</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.page{max-width:720px;margin:0 auto;padding:32px 20px 80px}
+h1{margin:0 0 4px;font-size:26px}.lead{color:var(--mute);margin:0 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px}
+.card h2{margin:0 0 4px;font-size:17px}.card p{margin:0 0 14px;color:var(--mute);font-size:14px;line-height:1.5}
+textarea{width:100%;height:90px;background:#0f1419;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;resize:vertical}
+textarea:focus{outline:2px solid var(--acc);border-color:transparent}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:26px;text-align:center;color:var(--mute);cursor:pointer;transition:.15s}
+.drop:hover,.drop.over{border-color:var(--acc);color:var(--text);background:rgba(20,184,166,.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-top:16px}
+.item{position:relative;border-radius:12px;overflow:hidden;background:#0f1419;border:1px solid var(--line)}
+.item img,.item video{width:100%;height:100px;object-fit:cover;display:block}
+.item button{position:absolute;top:6px;right:6px;width:28px;height:28px;padding:0;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:16px;line-height:1}
+.item button:hover{background:var(--bad)}
+.empty{color:var(--mute);font-size:14px;margin-top:14px;text-align:center}
+.slrow{display:flex;align-items:center;gap:14px}
+input[type=range]{flex:1;accent-color:var(--acc)}
+.lvl{min-width:110px;text-align:right;font-weight:600;color:var(--acc)}
+.mstat{padding:10px 14px;border-radius:10px;background:#0f1419;border:1px solid var(--line);font-size:14px}.mstat.ok{border-color:var(--acc);color:var(--acc)}.mstat.bad{border-color:var(--bad);color:#fca5a5}.testout{margin-top:12px;font-size:14px;line-height:1.7}.testout b{color:var(--acc)}
+.frow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--acc);color:#04201d;padding:12px 22px;border-radius:99px;font-weight:600;transition:.25s;opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.tip{background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.3);border-radius:12px;padding:12px 14px;font-size:13px;color:#b7ece6;line-height:1.5}
+</style></head>
+<body><div class="page">
+  <h1>MindGuard</h1>
+  <p class="lead">Remind yourself of what matters most to you.</p>
+
+  <div class="card">
+    <h2>My message</h2>
+    <p>You will see this when an alert appears. Write it in your own words, for yourself.</p>
+    <textarea id="message" placeholder="For example: I'm quitting this for my family and my goals."></textarea>
+    <div style="margin-top:12px"><button class="btn-primary" id="saveMsg">Save</button></div>
+  </div>
+
+  <div class="card">
+    <h2>My photos and videos</h2>
+    <p>Family, goals, anything that stops you. Each file must be under 20MB. They are saved only in this browser.</p>
+    <label class="drop" id="drop">
+      <input type="file" id="files" accept="image/*,video/*" multiple hidden>
+      <div style="font-size:30px">+</div>
+      <div>Click here or drag and drop files</div>
+    </label>
+    <div class="grid" id="list"></div>
+    <div class="empty" id="empty">Nothing added yet.</div>
+  </div>
+
+  <div class="card">
+    <h2>Sensitivity</h2>
+    <p>A stricter setting can sometimes raise false alarms on normal photos.</p>
+    <div class="slrow">
+      <span style="color:var(--mute);font-size:13px">Less strict</span>
+      <input type="range" id="th" min="0.2" max="0.95" step="0.05">
+      <span style="color:var(--mute);font-size:13px">More strict</span>
+    </div>
+    <div class="lvl" id="lvl" style="text-align:center;margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+    <h2>Gemini cloud check (optional)</h2>
+    <p>When the local detector is unsure (a borderline image), Gemini is asked for a second opinion. This reduces false alarms.</p>
+    <div class="frow"><span>Turn Gemini check ON</span><label class="switch"><input type="checkbox" id="gemOn"><span class="slider"></span></label></div>
+    <div style="margin:12px 0 6px;font-size:14px">Gemini API key</div>
+    <input type="password" id="gemKey" placeholder="AIza..." style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0f1419;color:var(--text);font:inherit">
+    <div style="margin:12px 0 6px;font-size:14px">Model</div>
+    <input type="text" id="gemModel" placeholder="gemini-2.5-flash" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0f1419;color:var(--text);font:inherit">
+    <div class="frow" style="margin-top:12px"><span>Check every image with Gemini (demo mode, uses more quota)</span><label class="switch"><input type="checkbox" id="gemAll"><span class="slider"></span></label></div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-primary" id="gemSave">Save</button>
+      <button class="btn-ghost" id="gemTest">Test key</button>
+    </div>
+    <div id="gemStat" class="mstat" style="margin-top:12px"></div>
+    <p style="margin:12px 0 0;font-size:12.5px">Your key is saved only in this browser. Get one at <b>aistudio.google.com</b> &rarr; "Get API key". Note: when ON, borderline images (a small 299px copy) are sent to Google, and on the free tier Google may use that data to improve its products.</p>
+  </div>
+
+  <div class="card">
+    <h2>Train the model</h2>
+    <p>Show your own examples to teach the extension what should and should not be flagged. Images are not saved, only numbers.</p>
+    <a href="train.html" target="_blank" class="btn-primary" style="display:inline-block;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600">Open training page</a>
+    <div id="trstat" class="mstat" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card">
+    <h2>What to scan</h2>
+    <p>Keep only what you need turned ON.</p>
+    <div class="frow"><span>Photos</span><label class="switch"><input type="checkbox" id="f_images"><span class="slider"></span></label></div>
+    <div class="frow"><span>Videos (live frames)</span><label class="switch"><input type="checkbox" id="f_video"><span class="slider"></span></label></div>
+    <div class="frow"><span>Text (words on the page, website name)</span><label class="switch"><input type="checkbox" id="f_text"><span class="slider"></span></label></div>
+    <div class="frow"><span>Audio (video subtitles/captions and audio file names)</span><label class="switch"><input type="checkbox" id="f_audio"><span class="slider"></span></label></div>
+  </div>
+
+  <div class="card">
+    <h2>Reference photo: set your own line</h2>
+    <p>Pick a photo that represents your "limit". Anything more explicit than it will be flagged. The photo is not saved, only its score (a number) is remembered.</p>
+    <div id="refstat" class="mstat"></div>
+    <input type="file" id="reffile" accept="image/*" style="margin-top:12px">
+    <div class="frow" style="margin-top:10px"><span>Use reference (instead of the slider)</span><label class="switch"><input type="checkbox" id="usref"><span class="slider"></span></label></div>
+    <div style="margin-top:8px"><button class="btn-danger" id="refclear" style="display:none">Remove reference</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Text filter: your own words</h2>
+    <p>Add your own extra words (separated by commas or new lines). They count as "strong", meaning one match triggers a flag.</p>
+    <textarea id="words" placeholder="for example: word1, word2"></textarea>
+    <div style="margin-top:12px"><button class="btn-primary" id="saveWords">Save</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Detection test</h2>
+    <p>First check that the detector is running. Pick any image and the scores will appear below.</p>
+    <div id="mstat" class="mstat">Checking detector status...</div>
+    <input type="file" id="testfile" accept="image/*" style="margin-top:12px">
+    <div id="testout" class="testout"></div>
+  </div>
+
+  <div class="tip">Tip: this extension is a speed bump, not a wall. Sharing your progress with a trusted friend helps a lot.</div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="features.js"></script>
+<script src="options.js"></script>
+</body></html>
