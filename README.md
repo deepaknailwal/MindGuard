@@ -4,6 +4,10 @@ A Chrome extension that helps people quit pornography. When it detects explicit 
 
 > Built as a hackathon project. It is a "speed bump", not a wall: it adds a pause between the urge and the click. It is not a replacement for professional help or support from people you trust.
 
+## Demo Video 
+
+   https://drive.google.com/file/d/16LnBCYaXqFh_tH2WmGR4z_YndWmeBZf9/view?usp=drive_link
+
 ## Features
 
 | Feature | What it does |
